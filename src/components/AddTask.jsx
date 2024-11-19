@@ -10,7 +10,7 @@ const AddTask = () => {
   };
 
   return (
-    <Flex gap={"2.5"}>
+    <Flex gap={"2.5"} mb="5">
       <Input
         size={"sm"}
         placeholder="Add new task"
