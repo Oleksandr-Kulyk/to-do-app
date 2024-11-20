@@ -1,13 +1,14 @@
-import { Flex, Text, Input } from "@chakra-ui/react";
+import { memo } from "react";
+import { Flex, Text, Input, IconButton } from "@chakra-ui/react";
 import { Checkbox } from "./ui/checkbox";
 import { useState, useRef } from "react";
 import { useDispatch } from "react-redux";
-import { completeTask, editTask } from "../redux/tasksSlice";
+import { BsX } from "react-icons/bs";
+import { completeTask, editTask, deleteTask } from "../redux/tasksSlice";
 
 const TaskItem = ({ id, text, completed }) => {
   const dispatch = useDispatch();
   const [editing, setEditing] = useState(false);
-  const [taskText, setTaskText] = useState(text);
   const inputRef = useRef();
 
   const enableEditing = () => {
@@ -16,19 +17,24 @@ const TaskItem = ({ id, text, completed }) => {
   };
   const disableEditing = () => {
     setEditing(false);
-    dispatch(editTask({ id, text: taskText }));
   };
 
+  const keyUpHandler = (e) => {
+    if (e.key !== 'Enter') return
+    disableEditing()
+  }
+
   return (
-    <Flex as="li" gap={"2.5"} maxW="100%" mb="2.5">
+    <Flex as="li" gap={"2.5"} maxW="100%" mb="2.5" align='center' border='1px solid white' p='1.5' borderRadius='lg' shadow='md' >
       {editing ? (
         <Input
           onBlur={disableEditing}
           ref={inputRef}
           size="sm"
           variant="flushed"
-          value={taskText}
-          onChange={(e) => setTaskText(e.target.value)}
+          value={text}
+          onChange={(e) => dispatch(editTask({id, text: e.target.value}))}
+          onKeyUp={keyUpHandler}
         />
       ) : (
         <>
@@ -40,15 +46,19 @@ const TaskItem = ({ id, text, completed }) => {
           ></Checkbox>
           <Text
             color={completed ? "gray.500" : "white"}
+            flexGrow='1'
             textDecor={completed ? "line-through" : null}
             onClick={enableEditing}
           >
-            {taskText}
+            {text}
           </Text>
+          <IconButton variant='outline' bg='transparent' color='white' size='sm' _hover={{borderColor: 'white'}} onClick={() => dispatch(deleteTask(id)) } >
+            <BsX />
+          </IconButton>
         </>
       )}
     </Flex>
   );
 };
 
-export default TaskItem;
+export default memo(TaskItem);
