@@ -13,16 +13,15 @@ const AddTask = () => {
   };
 
   const addTaskHandler = () => {
-    if(!task.trim()) return
+    if (!task.trim()) return;
     dispatch(addTask(task));
-    setTask('');
-  }
+    setTask("");
+  };
 
   const keyUpHandler = (e) => {
-    console.log(e.key)
-    if(e.key !== 'Enter') return 
+    if (e.key !== "Enter") return;
     addTaskHandler();
-  }
+  };
 
   return (
     <Flex gap={"2.5"} mb="5">
