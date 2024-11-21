@@ -1,13 +1,15 @@
 {
   "name": "to-do-app",
+  "main": "src/electron/main.js",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
+    "dev": "vite",               
+    "electron": "electron .",    
+    "start": "npm run dev & npm run electron",
+    "build": "vite build",       
+    "package": "electron-builder" 
   },
   "dependencies": {
     "@chakra-ui/react": "^3.1.2",
@@ -25,6 +27,7 @@
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.3",
+    "electron": "^33.2.0",
     "eslint": "^9.13.0",
     "eslint-plugin-react": "^7.37.2",
     "eslint-plugin-react-hooks": "^5.0.0",
