@@ -1,4 +1,5 @@
 import {app, BrowserWindow } from 'electron'
+import './db.js'
 
 const createWindow = () => {
     let window = new BrowserWindow({
