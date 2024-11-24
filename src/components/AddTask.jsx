@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Flex, Input, IconButton } from "@chakra-ui/react";
 import { VscAdd } from "react-icons/vsc";
 import { addTask } from "../redux/tasksSlice";
+import { v4 as uuidv4 } from "uuid";
 import { useDispatch } from "react-redux";
 
 const AddTask = () => {
@@ -12,10 +13,16 @@ const AddTask = () => {
     setTask(e.target.value);
   };
 
-  const addTaskHandler = () => {
-    if (!task.trim()) return;
-    dispatch(addTask(task));
-    setTask("");
+  const addTaskHandler = async () => {
+    try {
+      const newTask = await window.tasksAPI.addTask({
+        id: uuidv4(),
+        text: task,
+      });
+      console.log(newTask);
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   const keyUpHandler = (e) => {
