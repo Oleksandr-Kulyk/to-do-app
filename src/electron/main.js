@@ -2,9 +2,12 @@ import { app, BrowserWindow } from "electron";
 import { fileURLToPath } from "url";
 import path, { dirname } from "path";
 import configureIPC from "./ipcConfig.js";
+import initDB from "./db.js";
 
 const __fileName = fileURLToPath(import.meta.url);
 const __dirname = dirname(__fileName);
+
+let window, db;
 
 const createWindow = async () => {
   let window = new BrowserWindow({
@@ -21,7 +24,8 @@ const createWindow = async () => {
 };
 
 app.whenReady().then(async () => {
-  configureIPC();
+  db = await initDB();
+  configureIPC(db);
   createWindow();
 });
 

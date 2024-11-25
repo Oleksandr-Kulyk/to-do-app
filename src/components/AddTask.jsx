@@ -1,12 +1,10 @@
 import { useState } from "react";
 import { Flex, Input, IconButton } from "@chakra-ui/react";
 import { VscAdd } from "react-icons/vsc";
-import { addTask } from "../redux/tasksSlice";
 import { v4 as uuidv4 } from "uuid";
 import { useDispatch } from "react-redux";
 
 const AddTask = () => {
-  const dispatch = useDispatch();
   const [task, setTask] = useState("");
 
   const onChangeHandler = (e) => {
@@ -19,7 +17,7 @@ const AddTask = () => {
         id: uuidv4(),
         text: task,
       });
-      console.log(newTask);
+      setTask('');
     } catch (error) {
       console.log(error.message);
     }

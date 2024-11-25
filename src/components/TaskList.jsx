@@ -1,10 +1,25 @@
 import { Box } from "@chakra-ui/react";
-import { useSelector } from "react-redux";
 import TaskItem from "./TaskItem";
 import TasksHeading from "./TasksHeading";
+import { useEffect, useState } from "react";
 
 const TaskList = () => {
-  const tasks = useSelector((store) => store.tasks);
+
+const [tasks, setTasks] = useState([]);
+
+useEffect(() => {
+   (async () => {
+    try {
+      const taskList = await window.tasksAPI.getAllTasks();
+      console.log(taskList);
+      setTasks(taskList)
+      console.log(tasks);
+    } catch (error) {
+      console.error(console.error(error.message))
+    }  
+  })()
+}, []
+)
 
   return (
     <>
@@ -16,7 +31,7 @@ const TaskList = () => {
             return taskA.completed ? 1 : -1;
           })
           .map((task) => (
-            <TaskItem {...task} key={task.id} />
+            <TaskItem {...task} setTasks={setTasks} key={task.id} />
           ))}
       </Box>
     </>

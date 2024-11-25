@@ -2,27 +2,31 @@ import { memo } from "react";
 import { Flex, Text, Input, IconButton } from "@chakra-ui/react";
 import { Checkbox } from "./ui/checkbox";
 import { useState, useRef } from "react";
-import { useDispatch } from "react-redux";
 import { BsX } from "react-icons/bs";
-import { completeTask, editTask, deleteTask } from "../redux/tasksSlice";
 
-const TaskItem = ({ id, text, completed }) => {
-  const dispatch = useDispatch();
+const TaskItem = ({ id, text, completed, setTasks }) => {
   const [editing, setEditing] = useState(false);
+  const [editedTask, setEditedTask] = useState(text);
   const inputRef = useRef();
 
   const enableEditing = () => {
     setEditing(true);
     setTimeout(() => inputRef.current.focus(), 0);
   };
-  const disableEditing = () => {
+  const editTask = async () => {
     setEditing(false);
+    const newTasks = await window.tasksAPI.editTask({id, text: editedTask});
+    setTasks(newTasks);
   };
 
   const keyUpHandler = (e) => {
     if (e.key !== "Enter") return;
-    disableEditing();
   };
+
+  const completeTaskHandler = async () => {
+    const updatedTask = await window.tasksAPI.completeTask({id, completed});
+    setTasks(updatedTask);
+  }
 
   return (
     <Flex
@@ -38,14 +42,14 @@ const TaskItem = ({ id, text, completed }) => {
     >
       {editing ? (
         <Input
-          onBlur={disableEditing}
+          onBlur={editTask}
           ref={inputRef}
           size="sm"
           variant="unstyled"
           bgColor="transparent"
           color="white"
-          value={text}
-          onChange={(e) => dispatch(editTask({ id, text: e.target.value }))}
+          value={editedTask}
+          onChange={(e) => setEditedTask(e.target.value)}
           onKeyUp={keyUpHandler}
         />
       ) : (
@@ -54,7 +58,7 @@ const TaskItem = ({ id, text, completed }) => {
             variant="outline"
             _checked={{ color: "white", borderColor: "white" }}
             checked={completed}
-            onChange={() => dispatch(completeTask(id))}
+            onChange={completeTaskHandler}
           ></Checkbox>
           <Text
             color={completed ? "gray.500" : "white"}

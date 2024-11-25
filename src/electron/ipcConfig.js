@@ -1,16 +1,39 @@
-import initDB from "./db.js";
 import { ipcMain } from "electron";
 
-const configureIPC = async () => {
-  const db = await initDB();
+const configureIPC = async (dbInstance) => {
 
   ipcMain.handle("addTask", async (event, task) => {
     const { id, text } = task;
-    const newTask = await db.run(`INSERT INTO tasks (id, text) VALUES (?, ?)`, [
+    const newTask = await dbInstance.run(`INSERT INTO tasks (id, text) VALUES (?, ?)`, [
       id,
       text,
     ]);
     return newTask;
+  });
+
+  ipcMain.handle('getAllTasks', async (event) => {
+    const allTasks = await dbInstance.all('SELECT * FROM tasks');
+    return allTasks;
+  });
+
+  ipcMain.handle('completeTask', async (event, task) => {
+    try {
+      const {id, completed} = task;
+      await dbInstance.run(`UPDATE tasks SET completed=? WHERE id=?`, [!completed, id]);
+      return await dbInstance.all('SELECT * FROM tasks');
+    } catch (error) {
+      console.error(error);
+    };
+  })
+
+  ipcMain.handle('editTask', async (event, task) => {
+    try {
+      const {id, text} = task;
+      await dbInstance.run(`UPDATE tasks SET text=? WHERE id=?`, [text, id]);
+      return await dbInstance.all('SELECT * FROM tasks');
+    } catch (error) {
+      console.error(error.message);
+    }
   });
 };
 
