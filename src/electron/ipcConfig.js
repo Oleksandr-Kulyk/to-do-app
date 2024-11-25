@@ -35,6 +35,11 @@ const configureIPC = async (dbInstance) => {
       console.error(error.message);
     }
   });
+
+  ipcMain.handle('deleteTask', async (event, taskId) => {
+    await dbInstance.run(`DELETE FROM tasks WHERE id=?`, [taskId]);
+    return await dbInstance.all('SELECT * FROM tasks');
+  })
 };
 
 export default configureIPC;

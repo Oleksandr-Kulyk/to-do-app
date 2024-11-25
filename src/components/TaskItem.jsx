@@ -13,12 +13,7 @@ const TaskItem = ({ id, text, completed, setTasks }) => {
     setEditing(true);
     setTimeout(() => inputRef.current.focus(), 0);
   };
-  const editTask = async () => {
-    setEditing(false);
-    const newTasks = await window.tasksAPI.editTask({id, text: editedTask});
-    setTasks(newTasks);
-  };
-
+  
   const keyUpHandler = (e) => {
     if (e.key !== "Enter") return;
   };
@@ -26,6 +21,17 @@ const TaskItem = ({ id, text, completed, setTasks }) => {
   const completeTaskHandler = async () => {
     const updatedTask = await window.tasksAPI.completeTask({id, completed});
     setTasks(updatedTask);
+  }
+
+  const editTask = async () => {
+    setEditing(false);
+    const newTasks = await window.tasksAPI.editTask({id, text: editedTask});
+    setTasks(newTasks);
+  };
+
+  const deleteTask = async () => {
+    const newTasks = await window.tasksAPI.deleteTask(id);
+    setTasks(newTasks);
   }
 
   return (
@@ -74,7 +80,7 @@ const TaskItem = ({ id, text, completed, setTasks }) => {
             color="white"
             size="sm"
             _hover={{ borderColor: "white" }}
-            onClick={() => dispatch(deleteTask(id))}
+            onClick={deleteTask}
           >
             <BsX />
           </IconButton>
