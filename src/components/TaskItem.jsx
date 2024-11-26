@@ -3,8 +3,11 @@ import { Flex, Text, Input, IconButton } from "@chakra-ui/react";
 import { Checkbox } from "./ui/checkbox";
 import { useState, useRef } from "react";
 import { BsX } from "react-icons/bs";
+import { useDispatch } from "react-redux";
+import { completeTask, deleteTask } from "../redux/thunks/taskThunks";
 
-const TaskItem = ({ id, text, completed, setTasks }) => {
+const TaskItem = ({ id, text, completed }) => {
+  const dispatch = useDispatch();
   const [editing, setEditing] = useState(false);
   const [editedTask, setEditedTask] = useState(text);
   const inputRef = useRef();
@@ -13,26 +16,20 @@ const TaskItem = ({ id, text, completed, setTasks }) => {
     setEditing(true);
     setTimeout(() => inputRef.current.focus(), 0);
   };
-  
+
   const keyUpHandler = (e) => {
     if (e.key !== "Enter") return;
   };
 
-  const completeTaskHandler = async () => {
-    const updatedTask = await window.tasksAPI.completeTask({id, completed});
-    setTasks(updatedTask);
-  }
+  const completeTaskHandler = () => {
+    dispatch(completeTask({ id, completed }));
+  };
 
   const editTask = async () => {
     setEditing(false);
-    const newTasks = await window.tasksAPI.editTask({id, text: editedTask});
+    const newTasks = await window.tasksAPI.editTask({ id, text: editedTask });
     setTasks(newTasks);
   };
-
-  const deleteTask = async () => {
-    const newTasks = await window.tasksAPI.deleteTask(id);
-    setTasks(newTasks);
-  }
 
   return (
     <Flex
@@ -80,7 +77,7 @@ const TaskItem = ({ id, text, completed, setTasks }) => {
             color="white"
             size="sm"
             _hover={{ borderColor: "white" }}
-            onClick={deleteTask}
+            onClick={() => dispatch(deleteTask(id))}
           >
             <BsX />
           </IconButton>

@@ -8,10 +8,10 @@ import { useSelector } from "react-redux";
 
 const TasksHeading = () => {
   const tasksPercent = useSelector((state) => {
-    const completed = state.tasks.filter(
+    const completed = state.tasks.tasks.filter(
       (item) => item.completed === true
     ).length;
-    const all = state.tasks.length;
+    const all = state.tasks.tasks.length;
     return all > 0 ? Math.floor((completed * 100) / all) : 0;
   });
 

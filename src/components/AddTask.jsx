@@ -3,24 +3,19 @@ import { Flex, Input, IconButton } from "@chakra-ui/react";
 import { VscAdd } from "react-icons/vsc";
 import { v4 as uuidv4 } from "uuid";
 import { useDispatch } from "react-redux";
+import { addNewTask } from "../redux/thunks/taskThunks";
 
 const AddTask = () => {
+  const dispatch = useDispatch();
   const [task, setTask] = useState("");
 
   const onChangeHandler = (e) => {
     setTask(e.target.value);
   };
 
-  const addTaskHandler = async () => {
-    try {
-      const newTask = await window.tasksAPI.addTask({
-        id: uuidv4(),
-        text: task,
-      });
-      setTask('');
-    } catch (error) {
-      console.log(error.message);
-    }
+  const addTaskHandler = () => {
+    dispatch(addNewTask({ id: uuidv4(), text: task }));
+    setTask("");
   };
 
   const keyUpHandler = (e) => {
