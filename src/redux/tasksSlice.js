@@ -4,6 +4,7 @@ import {
   addNewTask,
   deleteTask,
   completeTask,
+  editTask,
 } from "./thunks/taskThunks.js";
 
 const tasksSlice = createSlice({
@@ -26,6 +27,9 @@ const tasksSlice = createSlice({
         state.tasks = action.payload;
       })
       .addCase(completeTask.fulfilled, (state, action) => {
+        state.tasks = action.payload;
+      })
+      .addCase(editTask.fulfilled, (state, action) => {
         state.tasks = action.payload;
       });
   },

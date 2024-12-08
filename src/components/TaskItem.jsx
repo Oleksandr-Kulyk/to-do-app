@@ -1,10 +1,11 @@
 import { memo } from "react";
 import { Flex, Text, Input, IconButton } from "@chakra-ui/react";
 import { Checkbox } from "./ui/checkbox";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
+import { motion } from "framer-motion";
 import { BsX } from "react-icons/bs";
 import { useDispatch } from "react-redux";
-import { completeTask, deleteTask } from "../redux/thunks/taskThunks";
+import { completeTask, deleteTask, editTask } from "../redux/thunks/taskThunks";
 
 const TaskItem = ({ id, text, completed }) => {
   const dispatch = useDispatch();
@@ -12,9 +13,13 @@ const TaskItem = ({ id, text, completed }) => {
   const [editedTask, setEditedTask] = useState(text);
   const inputRef = useRef();
 
+  useEffect(() => {
+    if (!editing) return;
+    inputRef.current.focus();
+  });
+
   const enableEditing = () => {
     setEditing(true);
-    setTimeout(() => inputRef.current.focus(), 0);
   };
 
   const keyUpHandler = (e) => {
@@ -25,14 +30,15 @@ const TaskItem = ({ id, text, completed }) => {
     dispatch(completeTask({ id, completed }));
   };
 
-  const editTask = async () => {
+  const handleEditTask = async () => {
     setEditing(false);
-    const newTasks = await window.tasksAPI.editTask({ id, text: editedTask });
-    setTasks(newTasks);
+    dispatch(editTask({ id, text: editedTask }));
   };
 
+  const MotionFlex = motion(Flex);
+
   return (
-    <Flex
+    <MotionFlex
       as="li"
       gap={"2.5"}
       maxW="100%"
@@ -42,10 +48,21 @@ const TaskItem = ({ id, text, completed }) => {
       p="1.5"
       borderRadius="lg"
       shadow="md"
+      initial={false}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: "-100%" }}
+      layout
+      layoutId={id}
+      transition={{
+        layout: {
+          duration: 0.4,
+          ease: "easeInOut",
+        },
+      }}
     >
       {editing ? (
         <Input
-          onBlur={editTask}
+          onBlur={handleEditTask}
           ref={inputRef}
           size="sm"
           variant="unstyled"
@@ -83,7 +100,7 @@ const TaskItem = ({ id, text, completed }) => {
           </IconButton>
         </>
       )}
-    </Flex>
+    </MotionFlex>
   );
 };
 

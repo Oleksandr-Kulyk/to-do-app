@@ -1,16 +1,13 @@
-import { fileURLToPath } from "url";
-import path, { dirname } from "path";
+import { app } from "electron";
 import pkg from "sqlite3";
 import { open } from "sqlite";
 
 const { Database } = pkg;
-const __fileName = fileURLToPath(import.meta.url);
-const __dirname = dirname(__fileName);
 
 const initDB = async () => {
   try {
     const db = await open({
-      filename: path.join(__dirname, "app.db"),
+      filename: path.join(app.getPath("userData"), "app.db"),
       driver: Database,
     });
     console.log("connected to db");

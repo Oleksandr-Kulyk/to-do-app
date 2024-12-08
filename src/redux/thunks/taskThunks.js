@@ -31,3 +31,8 @@ export const completeTask = createAsyncThunk(
     return await window.tasksAPI.completeTask(task);
   }
 );
+
+export const editTask = createAsyncThunk(
+  "tasks/editTask",
+  async (task) => await window.tasksAPI.editTask(task)
+);
