@@ -1,23 +1,23 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
-  getAllTasks,
   addNewTask,
   deleteTask,
   completeTask,
   editTask,
+  getTaskLists,
 } from "./thunks/taskThunks.js";
 
 const tasksSlice = createSlice({
   name: "tasks",
   initialState: {
-    tasks: [],
+    lists: [],
     status: "idle",
   },
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(getAllTasks.fulfilled, (state, action) => {
-        state.tasks = action.payload;
+      .addCase(getTaskLists.fulfilled, (state, action) => {
+        state.lists = action.payload;
         state.status = "succeeded";
       })
       .addCase(addNewTask.fulfilled, (state, action) => {

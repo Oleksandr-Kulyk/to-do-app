@@ -4,22 +4,14 @@ import {
   ProgressCircleRoot,
   ProgressCircleValueText,
 } from "./ui/progress-circle";
-import { useSelector } from "react-redux";
 
-const TasksHeading = () => {
-  const tasksPercent = useSelector((state) => {
-    const completed = state.tasks.tasks.filter(
-      (item) => Boolean(item.completed) === true
-    ).length;
-    const all = state.tasks.tasks.length;
-    return all > 0 ? Math.floor((completed * 100) / all) : 0;
-  });
+const TasksHeading = ({ title }) => {
   return (
     <Flex w="100%" align="center">
       <Heading as="h2" color="white" size="5xl" textAlign="center" flexGrow="1">
-        Your Tasks
+        {title}
       </Heading>
-      <ProgressCircleRoot value={tasksPercent} size="lg">
+      <ProgressCircleRoot value={0} size="lg">
         <ProgressCircleValueText color="white" />
         <ProgressCircleRing color="cyan.700" />
       </ProgressCircleRoot>

@@ -1,7 +1,7 @@
 import "./App.css";
 import { Container, Heading } from "@chakra-ui/react";
-import AddTask from "./components/AddTask";
-import TaskList from "./components/TaskList";
+import AddTaskList from "./components/AddTaskList.jsx";
+import TaskLists from "./components/TaskLists.jsx";
 
 function App() {
   return (
@@ -10,8 +10,8 @@ function App() {
         <Heading size="7xl" color="white" textAlign="center" mb={"12"}>
           Awesome Notes
         </Heading>
-        <AddTask />
-        <TaskList />
+        <AddTaskList />
+        <TaskLists />
       </Container>
     </Container>
   );

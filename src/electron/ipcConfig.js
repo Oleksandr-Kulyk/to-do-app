@@ -1,6 +1,28 @@
 import { ipcMain } from "electron";
 
 const configureIPC = async (dbInstance) => {
+  ipcMain.handle("getTaskLists", async (event) => {
+    try {
+      return await dbInstance.all("SELECT * FROM taskLists");
+    } catch (error) {
+      console.error(error.message);
+      throw error;
+    }
+  });
+
+  ipcMain.handle("addTaskList", async (event, taskList) => {
+    try {
+      const { id, title } = taskList;
+      await dbInstance.run(`INSERT INTO taskLists (id, title) VALUES (?, ?)`, [
+        id,
+        title,
+      ]);
+    } catch (error) {
+      console.error(error.message);
+      throw error;
+    }
+  });
+
   ipcMain.handle("addTask", async (event, task) => {
     const { id, text } = task;
     await dbInstance.run(`INSERT INTO tasks (id, text) VALUES (?, ?)`, [
