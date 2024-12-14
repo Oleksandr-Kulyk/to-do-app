@@ -13,8 +13,10 @@ const initDB = async () => {
     });
     console.log("connected to db");
     await db.exec("PRAGMA foreign_keys = ON;");
+    const foreignKeysStatus = await db.get("PRAGMA foreign_keys;");
+console.log("Foreign keys status:", foreignKeysStatus);
     await db.exec(`CREATE TABLE IF NOT EXISTS taskLists (
-      id  TEXT TPRIMARY KEY NOT NULL UNIQUE,
+      id  TEXT PRIMARY KEY NOT NULL UNIQUE,
       title TEXT NOT NULL
     )`);
     await db.exec(`CREATE TABLE IF NOT EXISTS tasks (
