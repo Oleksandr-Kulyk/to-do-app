@@ -2,21 +2,8 @@ import { Box } from "@chakra-ui/react";
 import { AnimatePresence } from "framer-motion";
 import TaskItem from "./TaskItem";
 import TasksHeading from "./TasksHeading";
-import { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { getAllTasks } from "../redux/thunks/taskThunks";
 
 const TaskList = () => {
-  const dispatch = useDispatch();
-  const tasks = useSelector((state) => state.tasks.tasks);
-  const status = useSelector((state) => state.tasks.status);
-
-  useEffect(() => {
-    if (status === "idle") {
-      dispatch(getAllTasks());
-    }
-  }, [dispatch, status]);
-
   return (
     <>
       <TasksHeading />

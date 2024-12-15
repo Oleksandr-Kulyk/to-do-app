@@ -1,7 +1,8 @@
-import { Flex, Box, Heading } from "@chakra-ui/react";
+import { Flex, Box, Heading, Grid } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getTaskLists } from "../redux/thunks/taskThunks";
+import TaskListCard from "./TaskListCard";
 
 const TaskLists = () => {
   const dispatch = useDispatch();
@@ -11,26 +12,22 @@ const TaskLists = () => {
   }, [dispatch]);
 
   const taskLists = useSelector((state) => state.tasks.lists);
+  console.log(taskLists);
 
   return (
     <>
       <Heading as="h2" color="white" size="5xl" textAlign="center" mb="10">
         Your Lists
       </Heading>
-      <Flex direction="column" gap={2.5}>
+      <Grid
+        templateColumns="repeat(auto-fit, minmax(300px, 1fr))"
+        gap={2.5}
+        placeItems="center"
+      >
         {taskLists.map((item) => (
-          <Box
-            key={item.id}
-            border="1px solid white"
-            borderRadius="lg"
-            p="5px 10px"
-          >
-            <Heading as="h3" color="white" size="2xl" textAlign="center">
-              {item.title}
-            </Heading>
-          </Box>
+          <TaskListCard key={item.id} {...item} />
         ))}
-      </Flex>
+      </Grid>
     </>
   );
 };

@@ -1,38 +1,14 @@
 import { ipcMain } from "electron";
+import { sortTaskRows } from "../utils/utils.js";
 
 const configureIPC = async (dbInstance) => {
   ipcMain.handle("getTaskLists", async (event) => {
     try {
-      const rows = await dbInstance.all("SELECT taskLists.id as listId, taskLists.title, tasks.id as taskId, tasks.text, tasks.completed, tasks.listID FROM taskLists LEFT JOIN tasks ON taskLists.id=tasks.listID");
-      const lists = rows.reduce((acc, item) => {
-        const list = acc.find(list => list.listId === item.listId)
-        if (!list) {
-          const newList = {
-            listId: item.listId,
-            title: item.title,
-            tasks: []
-          }
-          acc.push(newList)
-        }
-        if (item.taskId) {
-          const newTask = {
-            taskId: item.taskId,
-            text: item.text,
-            completed: item.completed === 1 ? true : false
-          }
-          list.tasks.push(newTask);
-        }
-        else {
-          const newTask = {
-            taskId: item.taskId,
-            text: item.text,
-            completed: item.completed === 1 ? true : false
-          }
-          list.tasks.push(newTask);
-        }
-        return acc
-      }, [])
-      console.log(lists);
+      const rows = await dbInstance.all(
+        "SELECT taskLists.id as listId, taskLists.title, tasks.id as taskId, tasks.text, tasks.completed, tasks.listID FROM taskLists LEFT JOIN tasks ON taskLists.id=tasks.listID"
+      );
+      const lists = sortTaskRows(rows);
+      return lists;
     } catch (error) {
       console.error(error.message);
       throw error;
