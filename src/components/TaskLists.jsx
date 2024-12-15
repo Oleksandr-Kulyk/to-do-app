@@ -1,4 +1,4 @@
-import { Flex, Box, Heading, Grid } from "@chakra-ui/react";
+import { Heading, Grid } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getTaskLists } from "../redux/thunks/taskThunks";
