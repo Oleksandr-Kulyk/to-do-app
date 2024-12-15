@@ -5,13 +5,13 @@ import {
   ProgressCircleValueText,
 } from "./ui/progress-circle";
 
-const TasksHeading = ({ title }) => {
+const TasksHeading = ({ title, progressValue }) => {
   return (
     <Flex w="100%" align="center">
       <Heading as="h2" color="white" size="5xl" textAlign="center" flexGrow="1">
         {title}
       </Heading>
-      <ProgressCircleRoot value={0} size="lg">
+      <ProgressCircleRoot value={progressValue} size="lg">
         <ProgressCircleValueText color="white" />
         <ProgressCircleRing color="cyan.700" />
       </ProgressCircleRoot>
