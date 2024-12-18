@@ -5,6 +5,8 @@ import {
   completeTask,
   editTask,
   getTaskLists,
+  deleteTaskList,
+  addTaskList,
 } from "./thunks/taskThunks.js";
 
 const tasksSlice = createSlice({
@@ -16,12 +18,23 @@ const tasksSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      .addCase(addTaskList.fulfilled, (state, action) => {
+        state.lists.push(action.payload);
+      })
       .addCase(getTaskLists.fulfilled, (state, action) => {
         state.lists = action.payload;
         state.status = "succeeded";
       })
+      .addCase(deleteTaskList.fulfilled, (state, action) => {
+        state.lists = state.lists.filter(
+          (item) => item.listId !== action.payload
+        );
+      })
       .addCase(addNewTask.fulfilled, (state, action) => {
-        state.tasks.push(action.payload);
+        const list = state.lists.find(
+          (item) => item.listId === action.payload.listID
+        );
+        list.tasks.push(action.payload);
       })
       .addCase(deleteTask.fulfilled, (state, action) => {
         state.tasks = action.payload;

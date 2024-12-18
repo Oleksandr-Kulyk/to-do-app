@@ -1,11 +1,12 @@
-import { Box, For } from "@chakra-ui/react";
+import { Box, Button, For } from "@chakra-ui/react";
 import { AnimatePresence } from "framer-motion";
 import { Container } from "@chakra-ui/react";
 import TaskItem from "./TaskItem";
 import TasksHeading from "./TasksHeading";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { sortCompleted } from "../utils/utils";
+import { calcProgress, sortCompleted } from "../utils/utils";
+import AddTask from "./AddTask";
 
 const TaskList = () => {
   const params = useParams();
@@ -14,13 +15,33 @@ const TaskList = () => {
   );
   const { listId, title, tasks } = taskList;
 
-  const progressValue =
-    (tasks.filter((item) => item.completed === true).length / tasks.length) *
-    100;
+  const navigate = useNavigate();
+
+  const progressValue = calcProgress(tasks);
 
   return (
-    <Container as="section" fluid minH="100vh" bgColor={"cyan.500"}>
+    <Container
+      as="section"
+      fluid
+      minH="100vh"
+      bgColor={"cyan.500"}
+      pt="5%"
+      pos="relative"
+    >
+      <Button
+        pos="absolute"
+        left="2.5"
+        top="2.5"
+        variant="outline"
+        bgColor="transparent"
+        border="1px solid white"
+        color="white"
+        onClick={() => navigate(-1)}
+      >
+        Back
+      </Button>
       <TasksHeading title={title} progressValue={progressValue} />
+      <AddTask />
       <Box as="ul">
         <AnimatePresence>
           <For each={sortCompleted(tasks)}>

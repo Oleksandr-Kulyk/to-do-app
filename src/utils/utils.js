@@ -29,3 +29,11 @@ export const sortCompleted = (tasks) => {
   });
   return sortedTasks;
 };
+
+export const calcProgress = (tasks) => {
+  if (!tasks.length) return 0;
+  const progressValue =
+    (tasks.filter((item) => item.completed === true).length / tasks.length) *
+    100;
+  return progressValue;
+};

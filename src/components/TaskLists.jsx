@@ -1,16 +1,8 @@
 import { Heading, Grid } from "@chakra-ui/react";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getTaskLists } from "../redux/thunks/taskThunks";
+import { useSelector } from "react-redux";
 import TaskListCard from "./TaskListCard";
 
 const TaskLists = () => {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(getTaskLists());
-  }, [dispatch]);
-
   const taskLists = useSelector((state) => state.tasks.lists);
   console.log(taskLists);
 

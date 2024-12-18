@@ -2,13 +2,20 @@ import { useState } from "react";
 import { Flex, Input, IconButton } from "@chakra-ui/react";
 import { VscAdd } from "react-icons/vsc";
 import { v4 as uuidv4 } from "uuid";
+import { useDispatch } from "react-redux";
+import { addTaskList } from "../redux/thunks/taskThunks";
+import { useNavigate } from "react-router-dom";
 
 const AddTaskList = () => {
+  const dispatch = useDispatch();
   const [title, setTitle] = useState("");
+  const navigate = useNavigate();
 
-  const addNewList = () => {
-    window.tasksAPI.addTaskList({ id: uuidv4(), title });
+  const addNewList = async () => {
+    const res = await dispatch(addTaskList({ id: uuidv4(), title })).unwrap();
+
     setTitle("");
+    navigate(`/lists/${res.listId}`);
   };
 
   return (

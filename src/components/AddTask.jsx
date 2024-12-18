@@ -4,17 +4,19 @@ import { VscAdd } from "react-icons/vsc";
 import { v4 as uuidv4 } from "uuid";
 import { useDispatch } from "react-redux";
 import { addNewTask } from "../redux/thunks/taskThunks";
+import { useParams } from "react-router-dom";
 
 const AddTask = () => {
   const dispatch = useDispatch();
   const [task, setTask] = useState("");
+  const { id } = useParams();
 
   const onChangeHandler = (e) => {
     setTask(e.target.value);
   };
 
   const addTaskHandler = () => {
-    dispatch(addNewTask({ id: uuidv4(), text: task }));
+    dispatch(addNewTask({ id: uuidv4(), text: task, listID: id }));
     setTask("");
   };
 

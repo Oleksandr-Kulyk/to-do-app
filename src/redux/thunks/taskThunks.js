@@ -7,10 +7,17 @@ export const getTaskLists = createAsyncThunk(
   }
 );
 
-/* export const getAllTasks = createAsyncThunk("tasks/getAllTasks", async () => {
-  const tasks = await window.tasksAPI.getAllTasks();
-  return tasks;
-}); */
+export const addTaskList = createAsyncThunk(
+  "tasks/addTaskList",
+  async (task) => {
+    return await window.tasksAPI.addTaskList(task);
+  }
+);
+
+export const deleteTaskList = createAsyncThunk(
+  "taskLists/deleteTaskList",
+  async (listID) => await window.tasksAPI.deleteTaskList(listID)
+);
 
 export const addNewTask = createAsyncThunk(
   "tasks/addNewTask",

@@ -1,15 +1,9 @@
+import { RouterProvider } from "react-router-dom";
 import "./App.css";
-import { Routes, Route } from "react-router-dom";
-import TaskPage from "./pages/TaskPage";
-import TaskList from "./components/TaskList";
+import router from "./routes/router";
 
 function App() {
-  return (
-    <Routes>
-      <Route path="/" element={<TaskPage />} />
-      <Route path="/lists/:id" element={<TaskList />} />
-    </Routes>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;

@@ -18,10 +18,26 @@ const configureIPC = async (dbInstance) => {
   ipcMain.handle("addTaskList", async (event, taskList) => {
     try {
       const { id, title } = taskList;
-      await dbInstance.run(`INSERT INTO taskLists (id, title) VALUES (?, ?)`, [
-        id,
-        title,
-      ]);
+      const result = await dbInstance.run(
+        `INSERT INTO taskLists (id, title) VALUES (?, ?)`,
+        [id, title]
+      );
+      if (result.changes) return { listId: id, title: title, tasks: [] };
+      else return null;
+    } catch (error) {
+      console.error(error.message);
+      throw error;
+    }
+  });
+
+  ipcMain.handle("deleteTaskList", async (event, listId) => {
+    try {
+      const result = await dbInstance.run(
+        `DELETE FROM taskLists WHERE id = ?`,
+        [listId]
+      );
+      if (result.changes) return listId;
+      else return null;
     } catch (error) {
       console.error(error.message);
       throw error;
@@ -29,17 +45,13 @@ const configureIPC = async (dbInstance) => {
   });
 
   ipcMain.handle("addTask", async (event, task) => {
-    const { id, text } = task;
-    await dbInstance.run(`INSERT INTO tasks (id, text) VALUES (?, ?)`, [
-      id,
-      text,
-    ]);
-    return dbInstance.get(`SELECT * FROM tasks WHERE id=?`, [id]);
-  });
-
-  ipcMain.handle("getAllTasks", async (event) => {
-    const allTasks = await dbInstance.all("SELECT * FROM tasks");
-    return allTasks;
+    const { id, text, listID } = task;
+    const result = await dbInstance.run(
+      `INSERT INTO tasks (id, text, listID) VALUES (?, ?, ?)`,
+      [id, text, listID]
+    );
+    if (result.changes) return task;
+    else return null;
   });
 
   ipcMain.handle("completeTask", async (event, task) => {
