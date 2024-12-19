@@ -7,7 +7,7 @@ import { BsX } from "react-icons/bs";
 import { useDispatch } from "react-redux";
 import { completeTask, deleteTask, editTask } from "../redux/thunks/taskThunks";
 
-const TaskItem = ({ id, text, completed }) => {
+const TaskItem = ({ taskId, text, completed }) => {
   const dispatch = useDispatch();
   const [editing, setEditing] = useState(false);
   const [editedTask, setEditedTask] = useState(text);
@@ -27,12 +27,12 @@ const TaskItem = ({ id, text, completed }) => {
   };
 
   const completeTaskHandler = () => {
-    dispatch(completeTask({ id, completed }));
+    dispatch(completeTask({ taskId, completed }));
   };
 
   const handleEditTask = async () => {
     setEditing(false);
-    dispatch(editTask({ id, text: editedTask }));
+    dispatch(editTask({ taskId, text: editedTask }));
   };
 
   const MotionFlex = motion(Flex);
@@ -52,7 +52,7 @@ const TaskItem = ({ id, text, completed }) => {
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: "-100%" }}
       layout
-      layoutId={id}
+      layoutId={taskId}
       transition={{
         layout: {
           duration: 0.4,

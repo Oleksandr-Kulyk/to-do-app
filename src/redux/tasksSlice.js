@@ -8,6 +8,7 @@ import {
   deleteTaskList,
   addTaskList,
 } from "./thunks/taskThunks.js";
+import { findTask } from "../utils/utils.js";
 
 const tasksSlice = createSlice({
   name: "tasks",
@@ -40,7 +41,10 @@ const tasksSlice = createSlice({
         state.tasks = action.payload;
       })
       .addCase(completeTask.fulfilled, (state, action) => {
-        state.tasks = action.payload;
+        console.log(action.payload);
+        const task = findTask(state.lists, action.payload.taskId);
+        console.log(task);
+        task.completed = action.payload.completed;
       })
       .addCase(editTask.fulfilled, (state, action) => {
         state.tasks = action.payload;

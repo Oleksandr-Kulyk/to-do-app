@@ -52,7 +52,7 @@ const TaskListCard = ({ listId, title, tasks }) => {
       </Heading>
       <Flex direction="column" gap="5">
         <For each={sortCompleted(tasks)}>
-          {(task) => <CardTask key={task.id} {...task} />}
+          {(task) => <CardTask key={task.taskId} {...task} />}
         </For>
       </Flex>
     </MotionBox>

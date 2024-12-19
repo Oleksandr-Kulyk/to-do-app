@@ -45,7 +45,7 @@ const TaskList = () => {
       <Box as="ul">
         <AnimatePresence>
           <For each={sortCompleted(tasks)}>
-            {(task) => <TaskItem {...task} key={task.id} />}
+            {(task) => <TaskItem {...task} key={task.taskId} />}
           </For>
         </AnimatePresence>
       </Box>

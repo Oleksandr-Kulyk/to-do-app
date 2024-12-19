@@ -37,3 +37,10 @@ export const calcProgress = (tasks) => {
     100;
   return progressValue;
 };
+
+export const findTask = (lists, taskId) => {
+  const tasks = lists.reduce((acc, item) => {
+    return [...acc, ...item.tasks];
+  }, []);
+  return tasks.find((item) => item.taskId === taskId);
+};

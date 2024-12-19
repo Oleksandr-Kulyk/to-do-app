@@ -56,14 +56,16 @@ const configureIPC = async (dbInstance) => {
 
   ipcMain.handle("completeTask", async (event, task) => {
     try {
-      const { id, completed } = task;
-      await dbInstance.run(`UPDATE tasks SET completed=? WHERE id=?`, [
-        !completed,
-        id,
-      ]);
-      return await dbInstance.all("SELECT * FROM tasks");
+      const { taskId, completed } = task;
+      const result = await dbInstance.run(
+        `UPDATE tasks SET completed=? WHERE id=?`,
+        [!completed, taskId]
+      );
+      if (result.changes) return { taskId, completed: !completed };
+      else return null;
     } catch (error) {
       console.error(error);
+      throw error
     }
   });
 

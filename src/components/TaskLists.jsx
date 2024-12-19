@@ -17,7 +17,7 @@ const TaskLists = () => {
         placeItems="center"
       >
         {taskLists.map((item) => (
-          <TaskListCard key={item.id} {...item} />
+          <TaskListCard key={item.listId} {...item} />
         ))}
       </Grid>
     </>
